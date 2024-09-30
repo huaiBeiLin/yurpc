@@ -1,6 +1,7 @@
 package com.yuxin.yurpc.Serializer;
 
 import java.io.*;
+import java.util.ServiceLoader;
 
 /**
  * JDK序列化器
@@ -16,6 +17,14 @@ public class JdkSerializer implements  Serializer {
      */
     @Override
     public <T> byte[] serialize(T object) throws IOException {
+        // 指定序列化器
+//        Serializer serializer = null;
+//        ServiceLoader<Serializer> serviceLoader = ServiceLoader.load(Serializer.class);
+//        for (Serializer service : serviceLoader) {
+//            serializer = service;
+//        }
+
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(object);

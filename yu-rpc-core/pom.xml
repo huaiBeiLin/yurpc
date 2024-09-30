@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.yiLin</groupId>
-  <artifactId>yu-rpc-easy</artifactId>
+  <artifactId>yu-rpc-core</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>Archetype - yu-rpc-easy</name>
+  <name>Archetype - yu-rpc-core</name>
   <url>http://maven.apache.org</url>
 
   <dependencies>
@@ -13,17 +13,31 @@
       <artifactId>vertx-core</artifactId>
       <version>4.5.1</version>
     </dependency>
-  <dependency>
-    <groupId>cn.hutool</groupId>
-    <artifactId>hutool-all</artifactId>
-    <version>5.8.16</version>
-  </dependency>
-  <dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <version>1.18.30</version>
-    <scope>provided</scope>
-  </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
+      <version>5.8.16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.30</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.3.12</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>
@@ -39,3 +53,4 @@
     </plugins>
   </build>
 </project>
+

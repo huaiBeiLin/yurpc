@@ -1,7 +1,8 @@
 package com.yuxin.yurpc.server;
 
-import com.yuxin.yurpc.Serializer.JdkSerializer;
+import com.yuxin.yurpc.RpcApplication;
 import com.yuxin.yurpc.Serializer.Serializer;
+import com.yuxin.yurpc.Serializer.SerializerFactory;
 import com.yuxin.yurpc.model.RpcRequest;
 import com.yuxin.yurpc.model.RpcResponse;
 import com.yuxin.yurpc.registry.LocalRegistry;
@@ -19,8 +20,12 @@ import java.lang.reflect.Method;
 public class HttpServerHandler implements Handler<HttpServerRequest> {
     @Override
     public void handle(HttpServerRequest request) {
+        // 创建序列化器实例
+        SerializerFactory.init();
+
         // 指定序列化器
-        final Serializer serializer = new JdkSerializer();
+//        final Serializer serializer = new JdkSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 记录日志
         System.out.println("Receive request: " + request.method() + " " + request.uri());

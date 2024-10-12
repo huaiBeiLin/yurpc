@@ -45,6 +45,14 @@
       <version>2.16.0</version>
     </dependency>
 
+    <!-- zookeeper -->
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-x-discovery</artifactId>
+      <version>5.6.0</version>
+    </dependency>
+
+
 
     <!-- https://mvnrepository.com/artifact/io.etcd/jetcd-core -->
     <dependency>
@@ -65,6 +73,12 @@
       <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter</artifactId>
+          <version>RELEASE</version>
+          <scope>test</scope>
+      </dependency>
 
   </dependencies>
   <build>

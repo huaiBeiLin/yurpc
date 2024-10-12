@@ -1,9 +1,12 @@
 package com.yuxin.yurpc.config;
 
+import lombok.Data;
+
 /**
  * packageName com.yuxin.yurpc.config
  * RPC框架注册中心配置
  */
+@Data
 public class RegistryConfig {
 
     /**
@@ -14,7 +17,7 @@ public class RegistryConfig {
     /**
      * 注册中心地址
      */
-    private String address = "http://localhost:2380";
+    private String address = "http://localhost:2379";
 
     /**
      * 用户名

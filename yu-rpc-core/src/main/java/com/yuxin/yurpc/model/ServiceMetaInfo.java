@@ -1,9 +1,13 @@
 package com.yuxin.yurpc.model;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.Data;
+
 /**
  * packageName com.yuxin.yurpc.model
  * 服务元信息（注册信息）
  */
+@Data
 public class ServiceMetaInfo {
     /**
      * 服务名称
@@ -34,9 +38,6 @@ public class ServiceMetaInfo {
      * 获取服务键名
      */
     public String getServiceKey() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(serviceName).append(":").append(serviceVersion).append(":").append(serviceGroup);
-//        return stringBuilder.toString();
         return String.format("%s:%s", serviceName, serviceVersion);
     }
 
@@ -44,10 +45,19 @@ public class ServiceMetaInfo {
      * 获取服务注册节点键名
      */
     public String getServiceNodeKey() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(getServiceKey()).append("/").append(serviceHost).append(":").append(servicePort);
-//        return stringBuilder.toString();
         return String.format("%s/%s:%s", getServiceKey(), serviceHost, servicePort);
+    }
+
+    /**
+     * 获取完整服务地址
+     *
+     * @return
+     */
+    public String getServiceAddress() {
+        if (!StrUtil.contains(serviceHost, "http")) {
+            return String.format("http://%s:%s", serviceHost, servicePort);
+        }
+        return String.format("%s:%s", serviceHost, servicePort);
     }
 
 }

@@ -1,16 +1,24 @@
 package com.yuxin.yurpc.proxy;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.yuxin.yurpc.RpcApplication;
 import com.yuxin.yurpc.Serializer.Serializer;
 import com.yuxin.yurpc.Serializer.SerializerFactory;
+import com.yuxin.yurpc.config.RpcConfig;
+import com.yuxin.yurpc.constant.RpcConstant;
 import com.yuxin.yurpc.model.RpcRequest;
 import com.yuxin.yurpc.model.RpcResponse;
+import com.yuxin.yurpc.model.ServiceMetaInfo;
+import com.yuxin.yurpc.registry.Registry;
+import com.yuxin.yurpc.registry.RegistryFactory;
 
 import javax.imageio.IIOException;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * packageName com.yuxin.yurpc.proxy
@@ -26,6 +34,7 @@ public class ServiceProxy implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
         // 创建序列化器实例
         SerializerFactory.init();
 
@@ -43,15 +52,30 @@ public class ServiceProxy implements InvocationHandler {
         try {
             // 序列化
             byte[] bodyBytes = serializer.serialize(rpcRequest);
+
+            // 从注册中心获取服务提供者地址
+            RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+            Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+            ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+            serviceMetaInfo.setServiceName(method.getDeclaringClass().getName());
+            serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+            List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
+            if (CollUtil.isEmpty(serviceMetaInfoList)) {
+                throw new RuntimeException("暂无服务地址");
+            }
+            // 暂时先取第一个
+            ServiceMetaInfo selectedServieMetaInfo = serviceMetaInfoList.get(0);
+
             // 发送请求
-            // todo 这里地址被硬编码了（需要使用注册中心和服务发现机制解决）
-            try (HttpResponse httpResponse = HttpRequest.post("localhost:8081")
+            try (HttpResponse httpResponse = HttpRequest.post(selectedServieMetaInfo.getServiceAddress())
                     .body(bodyBytes)
                     .execute()) {
                 byte[] result = httpResponse.bodyBytes();
                 // 反序列化
                 RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
                 return rpcResponse.getData();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } catch (IIOException e) {
             e.printStackTrace();

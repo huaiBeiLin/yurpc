@@ -1,5 +1,7 @@
 package com.yuxin.yurpc.Serializer;
 
+import com.caucho.hessian.io.Hessian2Input;
+import com.caucho.hessian.io.Hessian2Output;
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
 
@@ -17,6 +19,7 @@ public class HessianSerializer implements Serializer {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         HessianOutput ho = new HessianOutput(bos);
         ho.writeObject(object);
+        ho.flush();
         return bos.toByteArray();
     }
 
